@@ -3997,13 +3997,13 @@ GUISetState(@SW_SHOW)
 ;~ GUISetState(@SW_LOCK)
 
 Local $MSG = TrayGetMsg()
-Local $show = TrayCreateItem("显示")
-TrayCreateItem("")
-Local $hide = TrayCreateItem("隐藏")
-TrayCreateItem("")
-Local $exititem = TrayCreateItem("退出")
+	Local $show = TrayCreateItem("显示")
+	TrayCreateItem("")
+	Local $hide = TrayCreateItem("隐藏")
+	TrayCreateItem("")
+	Local $exititem = TrayCreateItem("退出")
 
-TraySetState()
+	TraySetState()
 
 #EndRegion ### END Koda GUI section ###
 $BOOKFILE = _PathFull("./向日葵通讯录.txt", @ScriptDir)
@@ -4088,7 +4088,7 @@ While 0x00000001
 	$NMSG = GUIGetMsg()
 	Switch $NMSG
 		Case $GUI_EVENT_CLOSE
-			GUISetState(@SW_HIDE)
+			Exit
 		Case $GUI_EVENT_MINIMIZE
 			GUISetState(@SW_HIDE)
 		Case $BUTTONHELP
@@ -4114,18 +4114,18 @@ While 0x00000001
 			ShellExecuteWait($BOOKFILE)
 			Sleep(100)
 			READBOOKSRELOAD()
-	EndSwitch
-	Local $MSG = TrayGetMsg()
-	Select
-		Case $MSG = 0
-			ContinueLoop
-		Case $MSG = $show
-			GUISetState(@SW_SHOW)
-		Case $MSG = $hide
-			GUISetState(@SW_HIDE)
-		Case $MSG = $exititem
-			Exit
-	EndSelect
+		EndSwitch
+		Local $MSG = TrayGetMsg()
+		Select
+			Case $MSG = 0
+				ContinueLoop
+			Case $MSG = $show
+				GUISetState(@SW_SHOW)
+			Case $MSG = $hide
+				GUISetState(@SW_HIDE)
+			Case $MSG = $exititem
+				Exit
+		EndSelect
 WEnd
 
 

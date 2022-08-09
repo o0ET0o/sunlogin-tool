@@ -3982,9 +3982,9 @@ Func _TempFile($S_DIRECTORYNAME = @TempDir, $S_FILEPREFIX = "~", $S_FILEEXTENSIO
 EndFunc   ;==>_TempFile
 Opt("MouseCoordMode", 0x00000000)
 Opt("PixelCoordMode", 0x00000000)
-Opt("TrayIconHide", 0x00000000)
-Opt("TrayIconDebug", 0x00000000)
-Opt("TrayMenuMode", 3)
+;~ Opt("TrayIconHide", 0x00000001)
+;~ Opt("TrayIconDebug", 0x00000000)
+Opt("TrayMenuMode", 3) 
 #Region ### START Koda GUI section ### Form=
 $FORMORAYCONN = GUICreate("向日葵登录器", 0x0000013A, 500, 0x000000C0, 0x0000007C)
 $LISTBOOKS = GUICtrlCreateListView("---识别码---|---验证码---|----备注----", 0x00000010, 0x00000008, 0x00000119, 0x00000199)
@@ -3994,17 +3994,7 @@ $INPUTADD = GUICtrlCreateInput("识别码,验证码,备注", 0x00000010, 0x00000
 $BUTTONADD = GUICtrlCreateButton("+", 0x000000FF, 0x000001D7, 0x00000029, 23)
 $BUTTONDEL = GUICtrlCreateButton("—", 210, 0x000001D7, 0x00000029, 23)
 GUISetState(@SW_SHOW)
-;~ GUISetState(@SW_LOCK)
-
-Local $MSG = TrayGetMsg()
-Local $show = TrayCreateItem("显示")
-TrayCreateItem("")
-Local $hide = TrayCreateItem("隐藏")
-TrayCreateItem("")
-Local $exititem = TrayCreateItem("退出")
-
-TraySetState()
-
+GUISetState(@SW_LOCK)
 #EndRegion ### END Koda GUI section ###
 $BOOKFILE = _PathFull("./向日葵通讯录.txt", @ScriptDir)
 Func ACTORAY()
@@ -4088,7 +4078,7 @@ While 0x00000001
 	$NMSG = GUIGetMsg()
 	Switch $NMSG
 		Case $GUI_EVENT_CLOSE
-			GUISetState(@SW_HIDE)
+			Exit
 		Case $GUI_EVENT_MINIMIZE
 			GUISetState(@SW_HIDE)
 		Case $BUTTONHELP
@@ -4100,33 +4090,44 @@ While 0x00000001
 				TOCONN($CODES[0x00000001], $CODES[0x00000002])
 			EndIf
 		Case $BUTTONADD
-			Local $MSG = GUICtrlRead($INPUTADD)
+			Local $MSG = GUICtrlRead($INPUTADD)			
 			Local $ITEM = StringSplit($MSG, ",")
 			Local $len = UBound($ITEM)
-			If $len >= 4 Then
+			If $len >=4 Then
 				$BOOKWR = FileOpen($BOOKFILE, 0x00000001 + 0x00000008)
 				FileWriteLine($BOOKWR, $ITEM[1] & @TAB & $ITEM[2] & @TAB & $ITEM[3] & @LF)
 				FileClose($BOOKWR)
 				Sleep(100)
 				READBOOKSRELOAD()
 			EndIf
-		Case $BUTTONDEL
+		case $BUTTONDEL
 			ShellExecuteWait($BOOKFILE)
 			Sleep(100)
 			READBOOKSRELOAD()
 	EndSwitch
-	Local $MSG = TrayGetMsg()
-	Select
-		Case $MSG = 0
-			ContinueLoop
-		Case $MSG = $show
-			GUISetState(@SW_SHOW)
-		Case $MSG = $hide
-			GUISetState(@SW_HIDE)
-		Case $MSG = $exititem
-			Exit
-	EndSelect
 WEnd
+Func smallicon
+			
+	Local $msg = TrayGetMsg()
+	Local $show    = TrayCreateItem("显示")
+TrayCreateItem("")
+Local $hide    = TrayCreateItem("隐藏")
+TrayCreateItem("")
+Local $exititem = TrayCreateItem("退出")
+
+TraySetState()
+    Select
+        Case $msg = 0
+            ContinueLoop
+        Case $msg = $show
+            GUISetState(@SW_SHOW)
+        Case $msg = $hide
+            GUISetState(@SW_HIDE)
+        Case $msg = $exititem
+            Exit
+    EndSelect
+	EndFunc
+
 
 
 
