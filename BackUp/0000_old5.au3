@@ -4008,35 +4008,35 @@ TraySetState()
 
 #EndRegion ### END Koda GUI section ###
 $BOOKFILE = _PathFull("./向日葵通讯录.txt", @ScriptDir)
-$PATHFILE = _PathFull("./EXE路径.txt", @ScriptDir)
+$PATHFILE=_PathFull("./EXE路径.txt", @ScriptDir)
 Func ACTORAY()
 EndFunc   ;==>ACTORAY
 Func WAITWINS()
 	If Not FileExists($PATHFILE) Then
-		$PATHFILES = FileOpen($PATHFILE, 0x00000001 + 0x00000008)
-		FileClose($PATHFILES)
+		$PATHFILES = FileOpen($PATHFILE, 0x00000001 + 0x00000008)		
+		FileClose($PATHFILES)		
 	EndIf
 	$PATHFILES = FileOpen($PATHFILE, 0)
-	$PATH = FileReadLine($PATHFILES, 1)
-	If $PATH == "" Then
-		MsgBox(0x00000000, "信息", "请正确配置启动路径", 0x00000003)
-		Return False
+	$PATH = FileReadLine($PATHFILES,1)
+	IF $PATH =="" Then
+		MsgBox(0x00000000, "信息", "请正确配置启动路径", 0x00000003)	
+		RETURN	False	
 	Else
 		ShellExecute($PATH)
-	EndIf
+	ENDIF	
 	Sleep(5000)
 	If Not WinExists("向日葵远程控制") Then
 		MsgBox(0x00000000, "", "5S内未打开程序，请正确配置启动路径或先打开向日葵远程并登录。", 0x00000002)
-		Return False
+		RETURN false
 	EndIf
-	Return True
+	return true
 EndFunc   ;==>WAITWINS
 Func TOCONN($CODE, $VALID)
 	If Not WinExists("向日葵远程控制") Then
 		#MSGBOX(0x00000000, "", "请先打开向日葵远程并登录。", 0x00000002)
-		If WAITWINS() == False Then
+		if WAITWINS()==false Then
 			Return
-		EndIf
+			EndIf
 	EndIf
 	WinSetState("向日葵远程控制", "", @SW_SHOW)
 	WinSetState("向日葵远程控制", "", @SW_ENABLE)
@@ -4130,17 +4130,6 @@ While 0x00000001
 			ShellExecuteWait($BOOKFILE)
 			Sleep(100)
 			READBOOKSRELOAD()
-		Case $BUTTONPATH
-			Local $var = FileOpenDialog("请选择向日葵执行程序(.exe)", @WindowsDir & "\", "应用程序 (*.exe)", 1)
-			If @error Then
-				MsgBox(4096, "", "没有选择文件!")
-			Else
-				$var = StringReplace($var, "|", @CRLF)
-				$PATHFILES = FileOpen($PATHFILE, 0x00000001 + 0x00000008)
-				FileWriteLine($PATHFILES, $var & @LF)
-				FileClose($PATHFILES)
-				MsgBox(4096, "", "配置成功，你选择了:" & $var)
-			EndIf
 	EndSwitch
 	Local $MSG = TrayGetMsg()
 	Select

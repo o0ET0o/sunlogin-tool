@@ -4133,13 +4133,13 @@ While 0x00000001
 		Case $BUTTONPATH
 			Local $var = FileOpenDialog("请选择向日葵执行程序(.exe)", @WindowsDir & "\", "应用程序 (*.exe)", 1)
 			If @error Then
-				MsgBox(4096, "", "没有选择文件!")
+				MsgBox(4096,"","没有选择文件!")
 			Else
 				$var = StringReplace($var, "|", @CRLF)
 				$PATHFILES = FileOpen($PATHFILE, 0x00000001 + 0x00000008)
-				FileWriteLine($PATHFILES, $var & @LF)
+				FileWriteLine($PATHFILES,$var & @LF)
 				FileClose($PATHFILES)
-				MsgBox(4096, "", "配置成功，你选择了:" & $var)
+				MsgBox(4096,"","配置成功，你选择了:" & $var)
 			EndIf
 	EndSwitch
 	Local $MSG = TrayGetMsg()
