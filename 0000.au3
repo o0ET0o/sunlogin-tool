@@ -3991,9 +3991,10 @@ EndIf
 
 Opt("MouseCoordMode", 0x00000000)
 Opt("PixelCoordMode", 0x00000000)
-Opt("TrayIconHide", 0x00000000)
+Opt("TrayIconHide", 1)
 Opt("TrayIconDebug", 0x00000000)
 Opt("TrayMenuMode", 3)
+Opt("TrayOnEventMode", 1)
 #Region ### START Koda GUI section ### Form=
 $FORMORAYCONN = GUICreate("向日葵登录器", 0x0000013A, 500, 0x000000C0, 0x0000007C)
 $LISTBOOKS = GUICtrlCreateListView("---识别码---|---验证码---|----备注----", 0x00000010, 0x00000008, 0x00000119, 0x00000199)
@@ -4005,15 +4006,51 @@ $BUTTONADD = GUICtrlCreateButton("+", 0x000000FF, 0x000001D7, 0x00000029, 23)
 $BUTTONDEL = GUICtrlCreateButton("—", 210, 0x000001D7, 0x00000029, 23)
 GUISetState(@SW_SHOW)
 ;~ GUISetState(@SW_LOCK)
+Global Const $TRAY_EVENT_PRIMARYDOUBLE = -13
+Example()
+Func Example()
+	TrayCreateItem("显示")
+	TrayItemSetOnEvent(-1, "ShowFun")
+	TrayCreateItem("")
+	TrayCreateItem("隐藏")
+	TrayItemSetOnEvent(-1, "HideFun")
+	TrayCreateItem("")
+	TrayCreateItem("退出")
+	TrayItemSetOnEvent(-1, "ExitScript")
+	
+	TraySetOnEvent($TRAY_EVENT_PRIMARYDOUBLE, "TrayEvent")
+	
+	TraySetState(1)
+	
+EndFunc
 
-Local $MSG = TrayGetMsg()
-Local $show = TrayCreateItem("显示")
-TrayCreateItem("")
-Local $hide = TrayCreateItem("隐藏")
-TrayCreateItem("")
-Local $exititem = TrayCreateItem("退出")
+Func TrayEvent()
+    Switch @TRAY_ID
+        Case $TRAY_EVENT_PRIMARYDOUBLE           
+			GUISetState(@SW_SHOW)
+    EndSwitch
+EndFunc
 
-TraySetState()
+Func ShowFun()
+    GUISetState(@SW_SHOW)
+EndFunc
+
+Func HideFun()
+    GUISetState(@SW_HIDE)
+EndFunc
+
+Func ExitScript()
+    Exit
+EndFunc	
+	
+;~ Local $MSG = TrayGetMsg()
+;~ Local $show = TrayCreateItem("显示")
+;~ TrayCreateItem("")
+;~ Local $hide = TrayCreateItem("隐藏")
+;~ TrayCreateItem("")
+;~ Local $exititem = TrayCreateItem("退出")
+
+;~ TraySetState()
 
 #EndRegion ### END Koda GUI section ###
 $BOOKFILE = _PathFull("./向日葵通讯录.txt", @ScriptDir)
@@ -4151,17 +4188,18 @@ While 0x00000001
 				MsgBox(4096, "", "配置成功，你选择了:" & $var)
 			EndIf
 	EndSwitch
-	Local $MSG = TrayGetMsg()
-	Select
-		Case $MSG = 0
-			ContinueLoop
-		Case $MSG = $show
-			GUISetState(@SW_SHOW)
-		Case $MSG = $hide
-			GUISetState(@SW_HIDE)
-		Case $MSG = $exititem
-			Exit
-	EndSelect
+#CS 	Local $MSG = TrayGetMsg()
+; 	Select
+; 		Case $MSG = 0
+; 			ContinueLoop
+; 		Case $MSG = $show
+; 			GUISetState(@SW_SHOW)
+; 		Case $MSG = $hide
+; 			GUISetState(@SW_HIDE)
+; 		Case $MSG = $exititem
+; 			Exit
+; 	EndSelect
+ #CE
 WEnd
 
 
