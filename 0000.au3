@@ -3980,6 +3980,15 @@ Func _TempFile($S_DIRECTORYNAME = @TempDir, $S_FILEPREFIX = "~", $S_FILEEXTENSIO
 	Until Not FileExists($S_TEMPNAME)
 	Return $S_TEMPNAME
 EndFunc   ;==>_TempFile
+
+$title = "向日葵登录器"
+If WinExists($title) Then 
+	$win = WinActivate($title) 
+	WinSetState($win,"",@SW_SHOW)
+	;MsgBox(0x00000000, "提示", $win & "程序已运行", 5)
+	Exit 
+EndIf	
+
 Opt("MouseCoordMode", 0x00000000)
 Opt("PixelCoordMode", 0x00000000)
 Opt("TrayIconHide", 0x00000000)
@@ -4106,7 +4115,7 @@ While 0x00000001
 		Case $GUI_EVENT_CLOSE
 			GUISetState(@SW_HIDE)
 		Case $GUI_EVENT_MINIMIZE
-			GUISetState(@SW_HIDE)
+			GUISetState(@SW_MINIMIZE )
 		Case $BUTTONHELP
 			MsgBox(0x00000040, "帮助", @CRLF & "通讯录文件位置：" & @CRLF & @TAB & "程序相同目录的‘向日葵通讯录.txt’文件。" & @CRLF & "格式：" & @CRLF & @TAB & "识别码@Tab验证码@Tab备注信息" & @CRLF & "注：@Tab为键盘跳格键，每行一条记录")
 		Case $BUTTONCONN
